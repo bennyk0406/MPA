@@ -154,7 +154,6 @@ const Problem = () => {
                         grid-template-columns: repeat(${width}, 1fr);
                         grid-template-rows: repeat(${height}, 1fr);
                         gap: 5px;
-                        aspect-ratio: 1;
                         width: 70vw;
                         max-width: 400px;
                     `}>
@@ -163,11 +162,12 @@ const Problem = () => {
                             const x = v % width;
                             return (
                                 <div css={css`
-                                    grid-column-start: ${y + 1};
-                                    grid-column-end: ${y + 2};
-                                    grid-row-start: ${x + 1};
-                                    grid-row-end: ${x + 2};
+                                    grid-column-start: ${x + 1};
+                                    grid-column-end: ${x + 2};
+                                    grid-row-start: ${y + 1};
+                                    grid-row-end: ${y + 2};
                                     background-color: #385170;
+                                    aspect-ratio: 1;
                                 `} key={i} />
                             )
                         })}
