@@ -29,3 +29,21 @@ body {
 :focus {
     outline: none;
 }
+
+::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: gray;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}

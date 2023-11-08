@@ -7,6 +7,7 @@ import Noodle from "./assets/noodle.svg"
 import Button from "./components/Button"
 import { useSearchParams } from "react-router-dom"
 import { MapData } from "./interface/mapData"
+import Modal from "./components/Modal"
 
 const Problem = () => {
     const [searchParams] = useSearchParams()
@@ -29,6 +30,7 @@ const Problem = () => {
     const [height, setHeight] = useState(0)
     const [width, setWidth] = useState(0)
     const [wall, setWall] = useState<boolean[][]>([])
+    const [resetModal, setResetModal] = useState(false)
     
     const div = useRef<HTMLDivElement>(null)
 
@@ -65,7 +67,7 @@ const Problem = () => {
         if (noodlePos.length === 0) return
         const [y, x] = noodlePos
         const [goalY, goalX] = mapData.goal
-        if (y === goalY && x === goalX) setFinished(true)
+        setFinished(y === goalY && x === goalX)
     }, [noodlePos])
 
     const moveNoodle = (direction: "left" | "right" | "up" | "down") => {
@@ -153,7 +155,7 @@ const Problem = () => {
                         display: grid;
                         grid-template-columns: repeat(${width}, 1fr);
                         grid-template-rows: repeat(${height}, 1fr);
-                        gap: 5px;
+                        gap: ${(width >= 15 || height >= 15) ? 3 : 5}px;
                         width: 70vw;
                         max-width: 400px;
                     `}>
@@ -238,7 +240,7 @@ const Problem = () => {
                                 <FontAwesomeIcon icon={faCaretRight} />
                             </Button>
                         </div>
-                        <Button width={50} height={50} action={reset}>
+                        <Button width={50} height={50} action={() => setResetModal(true)}>
                             <FontAwesomeIcon icon={faRotateRight} />
                         </Button>
                     </div>
@@ -254,7 +256,6 @@ const Problem = () => {
                         <div css={css`
                             text-align: center;
                             padding: 10px 0 0;
-                            color: #8a8f95;
                             font-size: 18px;
                         `}>
                             Answer
@@ -264,9 +265,11 @@ const Problem = () => {
                             padding: 10px;
                             width: 100%;
                             min-height: 100px;
+                            max-height: 300px;
+                            overflow-y: scroll;
                             box-sizing: border-box;
                             word-wrap: break-word;
-                            font-size: 20px;
+                            font-size: 16px;
                         `}>
                             {path}
                         </div>
@@ -279,6 +282,51 @@ const Problem = () => {
                     </Button>
                 </div>
             </div>
+            { resetModal
+            ? <Modal>
+                <div css={css`
+                    width: 400px;
+                    max-width: 90vw;
+                    height: 200px;
+                    background-color: #ffffff;
+                    border-radius: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                    padding: 10px 0;
+                `}>
+                    <div css={css`
+                        text-align: center;
+                        font-size: 20px;
+                        padding-top: 10px;
+                    `}>
+                        정말로 리셋하시겠습니까?
+                    </div>
+                    <div css={css`
+                        display: flex;
+                        gap: 50px;
+                        justify-content: center;
+                    `}>
+                        <Button width={100} height={50} style={css`
+                            background-color: #17ce3a;
+                            color: #ffffff;
+                            :hover {
+                                background-color: #12a02d;
+                                box-shadow: #12a02d66 0px 4px 8px;
+                            }
+                        `} action={() => {
+                            setResetModal(false)
+                            reset()
+                        }}>
+                            OK
+                        </Button>
+                        <Button width={100} height={50} action={() => setResetModal(false)}>
+                            Cancel
+                        </Button>
+                    </div>
+                </div>
+            </Modal>
+            : <></>}
         </>
     )
 }
