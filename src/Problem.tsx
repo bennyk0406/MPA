@@ -286,6 +286,7 @@ const Problem = () => {
             ? <Modal>
                 <div css={css`
                     width: 400px;
+                    max-width: 90vw;
                     height: 200px;
                     background-color: #ffffff;
                     border-radius: 10px;
