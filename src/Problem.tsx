@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCaretDown, faCaretLeft, faCaretRight, faCaretUp, faPerson, faRotateRight } from "@fortawesome/free-solid-svg-icons"
+import { faCopy } from "@fortawesome/free-regular-svg-icons"
 import { css } from "@emotion/react"
 import { useEffect, useRef, useState } from "react"
 import Noodle from "./assets/noodle.svg"
@@ -8,6 +9,7 @@ import Button from "./components/Button"
 import { useSearchParams } from "react-router-dom"
 import { MapData } from "./interface/mapData"
 import Modal from "./components/Modal"
+import Notification from "./components/Notification"
 
 const Problem = () => {
     const [searchParams] = useSearchParams()
@@ -22,6 +24,7 @@ const Problem = () => {
         position: []
     })
     
+    const [problem, setProblem] = useState("")
     const [personPos, setPersonPos] = useState<number[]>([0, 0])
     const [noodlePos, setNoodlePos] = useState<number[]>([0, 0])
     const [path, setPath] = useState("")
@@ -31,12 +34,27 @@ const Problem = () => {
     const [width, setWidth] = useState(0)
     const [wall, setWall] = useState<boolean[][]>([])
     const [resetModal, setResetModal] = useState(false)
+    const [notification, setNotification] = useState<string>();
     
     const div = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         import(`./data/problem_${number}.ts`).then((res) => {
-            setMapData(res.default)
+            const data = res.default as MapData
+            setMapData(data)
+            const modifiedWall: string[][] = data.wall.map((L) => L.map((v) => v ? "1" : "0"))
+            for (let dy = 0; dy < 2; dy++) {
+                for (let dx = 0; dx < 2; dx++) {
+                    modifiedWall[data.rock[0] + dy][data.rock[1] + dx] = "-"
+                }
+            }
+            for (let dy = 0; dy < 2; dy++) {
+                for (let dx = 0; dx < 2; dx++) {
+                    modifiedWall[data.goal[0] + dy][data.goal[1] + dx] = "*"    
+                }
+            }
+            modifiedWall[data.position[0]][data.position[1]] = "@"
+            setProblem(modifiedWall.map((v) => v.join("")).join("\n"))
         })  
     }, [])
 
@@ -113,14 +131,18 @@ const Problem = () => {
     }
 
     const copy = () => {
-        navigator.clipboard.writeText(path)
-            .then(() => alert("이동 경로가 클립보드에 복사되었습니다!"))
+        navigator.clipboard.writeText(path).then(() => {
+            setNotification("이동 경로가 복사되었습니다!")
+            setTimeout(() => {
+                setNotification(undefined)
+            }, 3000)
+        })
     }
 
     if (mapData.width === 0) return <></>
 
     return (
-        <>
+        <div ref={div} tabIndex={0} onKeyDown={keyDown}>
             <div css={css`
                 display: flex;
                 flex-direction: column;
@@ -137,7 +159,25 @@ const Problem = () => {
                 `}>
                     #1. 라면 밀기
                 </div>
-                <div css={css`color: gray; font-size: 18px;`}>Problem {number}.</div>
+                <div css={css`
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    gap: 10px;
+                    align-items: center;
+                `}>
+                    <Button action={() => {
+                        navigator.clipboard.writeText(problem).then(() => {
+                            setNotification("문제가 복사되었습니다!")
+                            setTimeout(() => {
+                                setNotification(undefined)
+                            }, 3000)
+                        })
+                    }} width={25} height={25}>
+                        <FontAwesomeIcon icon={faCopy} />
+                    </Button>
+                    <div css={css`color: gray; font-size: 18px;`}>Problem {number}.</div>
+                </div>
             </div>
             <div css={css`
                 display: flex;
@@ -149,7 +189,7 @@ const Problem = () => {
                 width: 100%;
                 flex-wrap: wrap;
                 max-width: 1200px;
-            `} ref={div} tabIndex={0} onKeyDown={keyDown}>
+            `}>
                 <div>
                     <div css={css`
                         display: grid;
@@ -327,7 +367,8 @@ const Problem = () => {
                 </div>
             </Modal>
             : <></>}
-        </>
+            <Notification content={notification} />
+        </div>
     )
 }
 
