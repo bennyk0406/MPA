@@ -11,8 +11,10 @@ const Notification: React.FC<NotificationProps> = (props) => {
     return (
         <CSSTransition in={props.content !== undefined} timeout={400} mountOnEnter unmountOnExit classNames="notification">
             <div css={css`
-                position: absolute;
+                position: fixed;
                 top: 50px;
+                left: 50%;
+                transform: translate(-50%, 0);
                 padding: 10px;
                 border-radius: 10px;
                 background-color: #ffffff;

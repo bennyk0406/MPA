@@ -142,7 +142,7 @@ const Problem = () => {
     if (mapData.width === 0) return <></>
 
     return (
-        <>
+        <div ref={div} tabIndex={0} onKeyDown={keyDown}>
             <div css={css`
                 display: flex;
                 flex-direction: column;
@@ -189,7 +189,7 @@ const Problem = () => {
                 width: 100%;
                 flex-wrap: wrap;
                 max-width: 1200px;
-            `} ref={div} tabIndex={0} onKeyDown={keyDown}>
+            `}>
                 <div>
                     <div css={css`
                         display: grid;
@@ -368,7 +368,7 @@ const Problem = () => {
             </Modal>
             : <></>}
             <Notification content={notification} />
-        </>
+        </div>
     )
 }
 
