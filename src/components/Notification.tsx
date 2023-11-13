@@ -23,6 +23,7 @@ const Notification: React.FC<NotificationProps> = (props) => {
                 gap: 10px;
                 align-items: center;
                 box-shadow: #dadfe366 0px 4px 8px;
+                white-space: nowrap;
 
                 @keyframes open {
                     from {
