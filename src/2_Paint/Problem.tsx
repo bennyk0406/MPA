@@ -46,7 +46,7 @@ const Problem = () => {
             let problem = `${res.map.length} ${res.map[0].length}`
             for (let i = 0; i < res.map.length; i++) {
                 problem += "\n"
-                problem += res.map[i].map((color: string) => colors.indexOf(color) + 1).join(" ")
+                problem += res.map[i].map((color: string) => res.colors.indexOf(color) + 1).join(" ")
             }
             setProblem(problem)
         })  
@@ -93,6 +93,7 @@ const Problem = () => {
             }
             return newMap
         })
+        setAnswer("")
     }
 
     const copy = () => {
