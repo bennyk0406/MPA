@@ -1,6 +1,6 @@
 const colors = ["#FF0000", "#FFC000", "#FFFF00", "#92D050", "#00B0F0", "#9943D9"]
-const [R, B, P] = colors // Please insert underbar(_) in front of the variables which are not used.
-//const _ = ""
+const [R, _O, _Y, _G, B, P] = colors // Please insert underbar(_) in front of the variables which are not used.
+
 
 const map = [
     [P, P, P, P, P, P, P, B],
