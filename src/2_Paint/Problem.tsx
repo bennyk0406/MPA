@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons"
@@ -43,7 +43,7 @@ const Problem = () => {
             })
             setRawMap(res.map)
             setModifiedMap(res.map.flat())
-            // setProblem(modifiedWall.map((v) => v.join("")).join("\n"))
+            setProblem("") // TODO
         })  
     }, [])
 
@@ -69,6 +69,7 @@ const Problem = () => {
                 newMap[index] = new Array(width).fill(selected)
                 return newMap 
             })
+            setAnswer("") // TODO
         }
         else {
             setMap((map) => {
@@ -76,6 +77,7 @@ const Problem = () => {
                 for (let i = 0; i < height; i++) newMap[i][index] = selected
                 return newMap
             })
+            setAnswer("") // TODO
         }
     }
 
