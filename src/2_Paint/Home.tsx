@@ -18,7 +18,7 @@ const Home = () => {
                 flex-direction: column;
                 gap: 10px;
             `}>
-                {new Array(6).fill(null).map((_, i) => (
+                {new Array(5).fill(null).map((_, i) => (
                     <Button style={css`
                         max-width: 70vw;
                         padding: 15px 0;
