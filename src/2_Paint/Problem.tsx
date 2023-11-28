@@ -167,14 +167,13 @@ const Problem = () => {
                                     align-items: end;
                                     background-color: ${map[y][x]};
                                 `} key={i}>
-                                    <div css={css`
+                                    {v === "" || <div css={css`
                                         width: 30%;
                                         height: 30%;
                                         border-top: 1px solid black;
                                         border-left: 1px solid black;
                                         background-color: ${v}
-                                    `}>
-                                    </div>
+                                    `} />}
                                 </div>
                             )
                         })}
