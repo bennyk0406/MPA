@@ -43,7 +43,12 @@ const Problem = () => {
             })
             setRawMap(res.map)
             setModifiedMap(res.map.flat())
-            setProblem("") // TODO
+            let problem = `${res.map.length} ${res.map[0].length}`
+            for (let i = 0; i < res.map.length; i++) {
+                problem += "\n"
+                problem += res.map[i].map((color: string) => colors.indexOf(color) + 1).join(" ")
+            }
+            setProblem(problem)
         })  
     }, [])
 
@@ -51,7 +56,7 @@ const Problem = () => {
         if (rawMap.length === 0) return
         for (let i = 0; i < height; i++) {
             for (let j = 0; j < width; j++) {
-                if (map[i][j] !== rawMap[i][j]) return
+                if (rawMap[i][j] !== "" && map[i][j] !== rawMap[i][j]) return
             }
         }
         setFinished(true)
@@ -67,9 +72,8 @@ const Problem = () => {
             setMap((map) => {
                 const newMap = [...map]
                 newMap[index] = new Array(width).fill(selected)
-                return newMap 
+                return newMap
             })
-            setAnswer("") // TODO
         }
         else {
             setMap((map) => {
@@ -77,8 +81,8 @@ const Problem = () => {
                 for (let i = 0; i < height; i++) newMap[i][index] = selected
                 return newMap
             })
-            setAnswer("") // TODO
         }
+        setAnswer(`${answer}\n${direction} ${index + 1} ${colors.indexOf(selected) + 1}`.trim())
     }
 
     const reset = () => {
@@ -143,10 +147,10 @@ const Problem = () => {
                 `}>
                     <div css={css`
                         display: grid;
-                        grid-template-columns: 20px repeat(${width}, 1fr);
-                        grid-template-rows: 20px repeat(${height}, 1fr);
+                        grid-template-columns: 25px repeat(${width}, 1fr);
+                        grid-template-rows: 25px repeat(${height}, 1fr);
                         gap: 5px;
-                        width: 70vw;
+                        width: 80vw;
                         max-width: 400px;
                     `}>
                         {modifiedMap.map((v, i) => {
@@ -176,28 +180,30 @@ const Problem = () => {
                         })}
                         {new Array(width).fill(null).map((_, i) => {
                             return (
-                                <div css={css`
+                                <Button style={css`
                                     grid-column: ${i + 2}/${i + 3};
                                     grid-row: 1/2;
                                     display: flex;
                                     justify-content: center;
                                     align-items: center;
-                                `} onClick={() => tint("V", i)} key={i}>
+                                    background-color: #f5f6f7;
+                                `} action={() => tint("V", i)} key={i}>
                                     {i + 1}
-                                </div>
+                                </Button>
                             )
                         })}
                         {new Array(height).fill(null).map((_, i) => {
                             return (
-                                <div css={css`
+                                <Button style={css`
                                     grid-row: ${i + 2}/${i + 3};
                                     grid-column: 1/2;
                                     display: flex;
                                     justify-content: center;
                                     align-items: center;
-                                `} onClick={() => tint("H", i)} key={i}>
+                                    background-color: #f5f6f7;
+                                `} action={() => tint("H", i)} key={i}>
                                     {i + 1}
-                                </div>
+                                </Button>
                             )
                         })}
                     </div>
@@ -223,7 +229,7 @@ const Problem = () => {
                         <div css={css`
                             display: flex;
                             gap: 7px;
-                            width: 100%;
+                            width: 90%;
                             padding: 20px 10px 10px;
                             box-sizing: border-box;
                             border: 1px solid black;
@@ -257,9 +263,12 @@ const Problem = () => {
                         text-align: center;
                     `}>
                         <div css={css`
-                            text-align: center;
-                            padding: 10px 0 0;
+                            padding: 10px 0;
                             font-size: 18px;
+                            border-bottom: 1px dashed gray;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
                         `}>
                             Answer
                         </div>
@@ -268,11 +277,12 @@ const Problem = () => {
                             padding: 10px;
                             width: 100%;
                             min-height: 100px;
-                            max-height: 300px;
+                            max-height: 150px;
                             overflow-y: scroll;
                             box-sizing: border-box;
                             word-wrap: break-word;
                             font-size: 16px;
+                            white-space: pre-wrap;
                         `}>
                             {answer}
                         </div>
