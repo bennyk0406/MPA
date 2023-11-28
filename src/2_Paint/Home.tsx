@@ -3,28 +3,22 @@ import { css } from "@emotion/react"
 import { faPlay } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useNavigate } from "react-router-dom"
-import Title from "./components/Title"
-import Button from "./components/Button"
-import React from "react"
+import Title from "../components/Title"
+import Button from "../components/Button"
 
-interface HomeProps {
-    title: string
-    probNum: number
-}
-
-const Home: React.FC<HomeProps> = (props) => {
+const Home = () => {
     const navigate = useNavigate()
 
     return (
         <>
-            <Title title={props.title} />
+            <Title title="#2. 페인트 칠하기" />
             <div css={css`
                 margin-top: 20px;
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
             `}>
-                {new Array(props.probNum).fill(null).map((_, i) => (
+                {new Array(5).fill(null).map((_, i) => (
                     <Button style={css`
                         max-width: 70vw;
                         padding: 15px 0;
