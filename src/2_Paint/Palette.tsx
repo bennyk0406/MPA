@@ -12,7 +12,7 @@ const Palette: React.FC<PaletteProps> = (props) => {
             flex-grow: 1;
             aspect-ratio: 1;
             background-color: ${props.bgcolor};
-            transition: all 0.3s ease 0s;
+            transition: all 0.1s ease 0s;
             cursor: pointer;
             :hover {
                 box-shadow: #dadfe366 0px 4px 8px;

@@ -109,7 +109,7 @@ const Problem = () => {
 
     return (
         <>
-            <Title title="#2. 페인트 칠하기">
+            <Title title="#2. 강의실 도색하기">
                 <div css={css`
                     display: flex;
                     flex-direction: row;
@@ -150,7 +150,7 @@ const Problem = () => {
                         display: grid;
                         grid-template-columns: 25px repeat(${width}, 1fr);
                         grid-template-rows: 25px repeat(${height}, 1fr);
-                        gap: 5px;
+                        gap: 3px;
                         width: 80vw;
                         max-width: 400px;
                     `}>
