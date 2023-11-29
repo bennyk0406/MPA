@@ -94,6 +94,7 @@ const Problem = () => {
             return newMap
         })
         setAnswer("")
+        setFinished(false)
     }
 
     const copy = () => {
