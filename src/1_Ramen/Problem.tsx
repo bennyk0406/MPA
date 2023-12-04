@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react"
+import { useEffect, useRef, useState } from "react"
+import { useSearchParams } from "react-router-dom"
+import { MapData } from "./interface/mapData"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCaretDown, faCaretLeft, faCaretRight, faCaretUp, faPerson, faRotateRight } from "@fortawesome/free-solid-svg-icons"
 import { faCopy } from "@fortawesome/free-regular-svg-icons"
-import { css } from "@emotion/react"
-import { useEffect, useRef, useState } from "react"
-import Noodle from "./assets/noodle.svg"
-import Button from "./components/Button"
-import { useSearchParams } from "react-router-dom"
-import { MapData } from "./interface/mapData"
-import Modal from "./components/Modal"
-import Notification from "./components/Notification"
+import Button from "../components/Button"
+import Modal from "../components/Modal"
+import Notification from "../components/Notification"
+import Title from "../components/Title"
+import Noodle from "../assets/noodle.svg"
 
 const Problem = () => {
     const [searchParams] = useSearchParams()
@@ -34,7 +35,7 @@ const Problem = () => {
     const [width, setWidth] = useState(0)
     const [wall, setWall] = useState<boolean[][]>([])
     const [resetModal, setResetModal] = useState(false)
-    const [notification, setNotification] = useState<string>();
+    const [notification, setNotification] = useState<string>()
     
     const div = useRef<HTMLDivElement>(null)
 
@@ -143,22 +144,7 @@ const Problem = () => {
 
     return (
         <div ref={div} tabIndex={0} onKeyDown={keyDown}>
-            <div css={css`
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-                width: 100%;
-                border-bottom: 1px solid gray;
-                padding-bottom: 20px;
-            `}>
-                <div css={css`color: gray;`}>2023-2 문풀안</div>
-                <div css={css`
-                    font-weight: 800;
-                    font-size: 32px;
-                `}>
-                    #1. 라면 밀기
-                </div>
+            <Title title="#1. 라면 밀기">
                 <div css={css`
                     display: flex;
                     flex-direction: row;
@@ -178,7 +164,7 @@ const Problem = () => {
                     </Button>
                     <div css={css`color: gray; font-size: 18px;`}>Problem {number}.</div>
                 </div>
-            </div>
+            </Title>
             <div css={css`
                 display: flex;
                 flex-direction: row;
