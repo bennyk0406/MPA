@@ -12,7 +12,7 @@ const subject = [
         href: "./ramen"
     },
     {
-        name: "#2. 강의실 도색하기",
+        name: "#2. 강의실 바닥 꾸미기",
         href: "./paint"
     }
 ]
