@@ -29,7 +29,7 @@ const Title: React.FC<TitleProps> = (props) => {
                 align-items: center;
             `}>
                 { props.lobby || <FontAwesomeIcon icon={faAngleLeft} style={{color: "#808080"}} /> }
-                <div css={css`color: gray;`} onClick={() => navigate("/")}>2023-2 문풀안</div>
+                <div css={css`color: gray;`} onClick={() => navigate("/")}>2024-1 문풀안</div>
             </div>
             <div css={css`
                 font-weight: 800;
