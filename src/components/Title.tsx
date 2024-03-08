@@ -20,7 +20,7 @@ const Title: React.FC<TitleProps> = (props) => {
             border-bottom: 1px solid gray;
             padding-bottom: 20px;
         `}>
-            <div css={css`color: gray;`} onClick={() => navigate("/")}>2023-2 문풀안</div>
+            <div css={css`color: gray;`} onClick={() => navigate("/")}>2024-1 문풀안</div>
             <div css={css`
                 font-weight: 800;
                 font-size: 32px;
