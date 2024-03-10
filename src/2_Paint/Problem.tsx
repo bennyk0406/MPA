@@ -110,7 +110,7 @@ const Problem = () => {
 
     return (
         <>
-            <Title title="#2. 강의실 도색하기">
+            <Title title="#2. 강의실 바닥 꾸미기">
                 <div css={css`
                     display: flex;
                     flex-direction: row;
