@@ -13,9 +13,9 @@ const App = () => {
                     <Route path="/" element={<Lobby />} />
                     <Route path="/ramen" element={<Home title="#1. 라면 밀기" probNum={5} />} />
                     <Route path="/paint" element={<Home title="#2. 강의실 바닥 꾸미기" probNum={5} />} />
-                    <Route path="/fire" element={<Home title="#3. 실험실 불 끄기" probNum={5} />} />
+                    <Route path="/fire" element={<Home title="#3. 실험실 불 끄기" probNum={7} />} />
                     <Route path="/ramen/problem" element={<RamenProblem />} />
-                    <Route path="/paint/problem" element={<PaintProblem />} />
+                    <Route path="/paint/problem" element={<PaintProblem />} />x
                     <Route path="/fire/problem" element={<FireProblem />} />
                 </Routes>
             </BrowserRouter>

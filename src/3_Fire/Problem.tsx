@@ -44,13 +44,18 @@ const Problem = () => {
                 off.push(new Array(res.map[0].length).fill(false))
             }
             setInfo({
-                problem: "",
+                problem: (res.map as string[][])
+                .map((v) => 
+                    v
+                        .map((v_) => ({"": ".", "fire": "1", "wall": "#"}[v_]))
+                        .join("")
+                ).join("\n"),
                 nowMap: res.map as string[][],
                 map: res.map as string[][],
                 off
             })
         })
-    }, [])
+    }, [number])
 
     useEffect(() => {
         if (info.nowMap.length === 0) return
@@ -84,6 +89,7 @@ const Problem = () => {
             off
         })
         setFinished(false)
+        setAnswer("")
     }
 
     const tint = (x: number, y: number) => {
@@ -174,7 +180,6 @@ const Problem = () => {
                         width: 80vw;
                         max-width: 400px;
                         border: 1px solid black;
-                        aspect-ratio: 1;
                     `}>
                         {info.nowMap.flat().map((v, i) => {
                             const x = i % info.nowMap[0].length
@@ -184,6 +189,10 @@ const Problem = () => {
                                 box-sizing: border-box;
                                 border-right: 1px dashed black;
                                 border-bottom: 1px dashed black;
+                                aspect-ratio: 1;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
                                 ${x === info.nowMap[0].length - 1 && 'border-right: none;'}
                                 ${y === info.nowMap.length - 1 && 'border-bottom: none;'}
                             `}>
@@ -191,7 +200,7 @@ const Problem = () => {
                                 ? <div
                                     css={css`
                                         width: 100%;
-                                        aspect-ratio: 1;
+                                        height: 100%;
                                         border-radius: 0;
                                         display: flex;
                                         justify-content: center;
@@ -203,14 +212,15 @@ const Problem = () => {
                                         }
                                     `}
                                 >
-                                    {v === "fire" && <img src={Fire} css={css`height: 80%;`} />}
+                                    {v === "fire" && <img src={Fire} css={css`width: 60%;`} />}
                                 </div>
                                 : v === "wall"
-                                ? <div css={css`background-color: gray; height: 100%;`}/>
+                                ? <div css={css`background-color: gray; width: 100%; height: 100%;`}/>
                                 : <Button
                                     action={() => tint(x, y)}
                                     style={css`
                                         border-radius: 0px;
+                                        width: 100%;
                                         height: 100%;
                                         background-color: ${info.off[y][x] ? "#3e95ff" : "#F5F6F7"};
 
