@@ -7,15 +7,13 @@ import { faRotateRight } from "@fortawesome/free-solid-svg-icons"
 import { faCopy } from "@fortawesome/free-regular-svg-icons"
 import Button from "../components/Button"
 import Modal from "../components/Modal"
-import Notification from "../components/Notification"
 import Title from "../components/Title"
 import Palette from "./Palette"
+import { EventHandler } from "../utils/event"
 
 
 const Problem = () => {
     const [searchParams] = useSearchParams()
-    const number = searchParams.get("no")
-    if (number === null) return <></>    
     const [problem, setProblem] = useState("")
     const [answer, setAnswer] = useState("")
     const [height, setHeight] = useState(0)
@@ -26,8 +24,9 @@ const Problem = () => {
     const [colors, setColors] = useState<string[]>([])
     const [modifiedMap, setModifiedMap] = useState<string[]>([])
     const [resetModal, setResetModal] = useState(false)
-    const [notification, setNotification] = useState<string>()
     const [selected, setSelected] = useState("")
+    
+    const number = searchParams.get("no")
 
     useEffect(() => {
         import(`./data/problem_${number}.ts`).then((res) => {
@@ -50,7 +49,7 @@ const Problem = () => {
             }
             setProblem(problem)
         })  
-    }, [])
+    }, [number])
 
     useEffect(() => {
         if (rawMap.length === 0) return
@@ -60,11 +59,8 @@ const Problem = () => {
             }
         }
         setFinished(true)
-        setNotification("맞았습니다!")
-        setTimeout(() => {
-            setNotification(undefined)
-        }, 3000)
-    }, [map])
+        EventHandler.trigger("notification", "맞았습니다!")
+    }, [map, height, rawMap, width])
 
     const tint = (direction: "H" | "V", index: number) => {
         if (selected === "") return
@@ -99,10 +95,7 @@ const Problem = () => {
 
     const copy = () => {
         navigator.clipboard.writeText(answer).then(() => {
-            setNotification("답안이 복사되었습니다!")
-            setTimeout(() => {
-                setNotification(undefined)
-            }, 3000)
+            EventHandler.trigger("notification", "답안이 복사되었습니다!")
         })
     }
 
@@ -120,10 +113,7 @@ const Problem = () => {
                 `}>
                     <Button action={() => {
                         navigator.clipboard.writeText(problem).then(() => {
-                            setNotification("문제가 복사되었습니다!")
-                            setTimeout(() => {
-                                setNotification(undefined)
-                            }, 3000)
+                            EventHandler.trigger("notification", "문제가 복사되었습니다!")
                         })
                     }} width={25} height={25}>
                         <FontAwesomeIcon icon={faCopy} />
@@ -341,7 +331,6 @@ const Problem = () => {
                 </div>
             </Modal>
             : <></>}
-            <Notification content={notification} />
         </>
     )
 }

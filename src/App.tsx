@@ -4,11 +4,13 @@ import Home from "./Home"
 import { default as RamenProblem } from "./1_Ramen/Problem"
 import { default as PaintProblem } from "./2_Paint/Problem"
 import { default as FireProblem } from "./3_Fire/Problem"
+import { NotiContainer } from "./components/Notification"
 
 const App = () => {
     return (
         <>
             <BrowserRouter>
+                <NotiContainer />
                 <Routes>
                     <Route path="/" element={<Lobby />} />
                     <Route path="/ramen" element={<Home title="#1. 라면 밀기" probNum={5} />} />

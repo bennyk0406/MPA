@@ -7,8 +7,8 @@ import Button from "../components/Button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCopy, faRotateRight } from "@fortawesome/free-solid-svg-icons"
 import Modal from "../components/Modal"
-import Notification from "../components/Notification"
 import Fire from "../assets/flame.svg"
+import { EventHandler } from "../utils/event"
 
 interface IProblemInfo {
     map: string[][]
@@ -31,7 +31,6 @@ const Problem = () => {
     const number = searchParams.get("no")
 
     const [info, setInfo] = useState(defaultInfo)
-    const [notification, setNotification] = useState<string | undefined>()
     const [resetModal, setResetModal] = useState(false)
     const [answer, setAnswer] = useState("")
     const [finished, setFinished] = useState(false)
@@ -58,22 +57,16 @@ const Problem = () => {
     }, [number])
 
     useEffect(() => {
-        if (info.nowMap.length === 0) return
+        if (info.nowMap.length === 0 || finished) return
         if (info.nowMap.flat().filter((v) => v === "fire").length !== 0) return
         
         setFinished(true)
-        setNotification("맞았습니다!")
-        setTimeout(() => {
-            setNotification(undefined)
-        }, 3000)
-    }, [info])
+        EventHandler.trigger("notification", "맞았습니다!")
+    }, [info, finished])
 
     const copy = () => {
         navigator.clipboard.writeText(answer).then(() => {
-            setNotification("답안이 복사되었습니다!")
-            setTimeout(() => {
-                setNotification(undefined)
-            }, 3000)
+            EventHandler.trigger("notification", "답안이 복사되었습니다!")
         })
     }
 
@@ -91,6 +84,19 @@ const Problem = () => {
         setFinished(false)
         setAnswer("")
     }
+
+    useEffect(() => {
+        if (info.off.some((v) => v.some((v_) => v_))) {
+            setTimeout(() => {
+                const off: boolean[][] = []
+                for (let i = 0; i < info.map.length; i++) {
+                    off.push(new Array(info.map[0].length).fill(false))
+                }
+        
+                setInfo({...info, off})
+            }, 500)
+        }
+    }, [info])
 
     const tint = (x: number, y: number) => {
         if (info.nowMap[y][x] === "fire") return
@@ -145,10 +151,7 @@ const Problem = () => {
                 `}>
                     <Button action={() => {
                         navigator.clipboard.writeText(info.problem).then(() => {
-                            setNotification("문제가 복사되었습니다!")
-                            setTimeout(() => {
-                                setNotification(undefined)
-                            }, 3000)
+                            EventHandler.trigger("notification", "문제가 복사되었습니다!")
                         })
                     }} width={25} height={25}>
                         <FontAwesomeIcon icon={faCopy} />
@@ -193,8 +196,8 @@ const Problem = () => {
                                 display: flex;
                                 justify-content: center;
                                 align-items: center;
-                                ${x === info.nowMap[0].length - 1 && 'border-right: none;'}
-                                ${y === info.nowMap.length - 1 && 'border-bottom: none;'}
+                                ${x === info.nowMap[0].length - 1 && "border-right: none;"}
+                                ${y === info.nowMap.length - 1 && "border-bottom: none;"}
                             `}>
                                 {v === "fire" || info.map[y][x] === "fire"
                                 ? <div
@@ -205,14 +208,23 @@ const Problem = () => {
                                         display: flex;
                                         justify-content: center;
                                         align-items: center;
-                                        background-color: ${info.off[y][x] ? "#3e95ff" : v !== "fire" ? "#FF4F3D" : "transparent"};
-
-                                        :hover {
-                                            ${info.off[y][x] && "background-color: #3177CC;"}
-                                        }
+                                        position: relative;
                                     `}
                                 >
-                                    {v === "fire" && <img src={Fire} css={css`width: 60%;`} />}
+                                    {<img src={Fire} css={css`width: 60%; ${v !== "fire" && "filter: grayscale(100%);"}`} />}
+                                    {
+                                        info.off[y][x] &&
+                                        <div css={css`
+                                            width: 100%;
+                                            height: 100%;
+                                            position: absolute;
+                                            background-color: #3E95FF80;
+
+                                            :hover {
+                                                ${info.off[y][x] && "background-color:#3177CC80;"}
+                                            }
+                                        `} />
+                                    }
                                 </div>
                                 : v === "wall"
                                 ? <div css={css`background-color: gray; width: 100%; height: 100%;`}/>
@@ -222,10 +234,10 @@ const Problem = () => {
                                         border-radius: 0px;
                                         width: 100%;
                                         height: 100%;
-                                        background-color: ${info.off[y][x] ? "#3e95ff" : "#F5F6F7"};
+                                        background-color: ${info.off[y][x] ? "#3e95ff80" : "#F5F6F7"};
 
                                         :hover {
-                                            ${info.off[y][x] && "background-color: #3177CC;"}
+                                            ${info.off[y][x] && "background-color:#3177CC80;"}
                                         }
                                     `}
                                 />
@@ -244,19 +256,45 @@ const Problem = () => {
                             <FontAwesomeIcon icon={faRotateRight} />
                         </Button>
                 
-                        <Button height={50} action={() => setMode(mode === "horizontal" ? "vertical" : "horizontal") } style={css`padding: 0 20px;`}>
-                            {
-                                mode === "horizontal"
-                                ? <>
-                                    <span css={css`font-size: 20px; font-weight: 600;`}>H</span>
-                                    <span css={css`white-space: pre;`}>{" / V"}</span>
-                                </>
-                                : <>    
-                                    <span css={css`white-space: pre;`}>{"H / "}</span>
-                                    <span css={css`font-size: 20px; font-weight: 600;`}>V</span>
-                                </>
-                            }
-                        </Button>
+                        <div css={css`
+                            display: flex;
+                            gap: 10px;
+                        `}>
+                            <Button
+                                height={50}
+                                width={50}
+                                action={() => setMode("horizontal")}
+                                style={css`
+                                    font-size: 20px;
+                                    font-weight: 600;
+                                    color: ${mode === "horizontal" ? "black" : "gray"};
+                                    box-shadow: ${mode === "horizontal" && "inset 4px 4px 8px 0px #B1B2B3"};
+
+                                    :hover {
+                                        box-shadow: ${mode === "horizontal" && "inset 4px 4px 8px 0px #B1B2B3"};
+                                    }
+                                `}
+                            >
+                                H
+                            </Button>
+                            <Button
+                                height={50}
+                                width={50}
+                                action={() => setMode("vertical")}
+                                style={css`
+                                    font-size: 20px;
+                                    font-weight: 600;
+                                    color: ${mode === "vertical" ? "black" : "gray"};
+                                    box-shadow: ${mode === "vertical" && "inset 4px 4px 8px 0px #B1B2B3"};
+
+                                    :hover {
+                                        box-shadow: ${mode === "vertical" && "inset 4px 4px 8px 0px #B1B2B3"};
+                                    }
+                                `}
+                            >
+                                V
+                            </Button>
+                        </div>
                     </div>
                 </div>
                 <div>
@@ -345,7 +383,6 @@ const Problem = () => {
                 </div>
             </Modal>
             : <></>}
-            <Notification content={notification} />
         </>
     )
 }
