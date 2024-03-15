@@ -229,16 +229,13 @@ const Problem = () => {
                                 : v === "wall"
                                 ? <div css={css`background-color: gray; width: 100%; height: 100%;`}/>
                                 : <Button
+                                    disabled
                                     action={() => tint(x, y)}
                                     style={css`
                                         border-radius: 0px;
                                         width: 100%;
                                         height: 100%;
                                         background-color: ${info.off[y][x] ? "#3e95ff80" : "#F5F6F7"};
-
-                                        :hover {
-                                            ${info.off[y][x] && "background-color:#3177CC80;"}
-                                        }
                                     `}
                                 />
                                 }
@@ -267,7 +264,7 @@ const Problem = () => {
                                 style={css`
                                     font-size: 20px;
                                     font-weight: 600;
-                                    color: ${mode === "horizontal" ? "black" : "gray"};
+                                    color: ${mode === "horizontal" ? "black" : "#B0B0B0"};
                                     box-shadow: ${mode === "horizontal" && "inset 4px 4px 8px 0px #B1B2B3"};
 
                                     :hover {
@@ -284,7 +281,7 @@ const Problem = () => {
                                 style={css`
                                     font-size: 20px;
                                     font-weight: 600;
-                                    color: ${mode === "vertical" ? "black" : "gray"};
+                                    color: ${mode === "vertical" ? "black" : "#B0B0B0"};
                                     box-shadow: ${mode === "vertical" && "inset 4px 4px 8px 0px #B1B2B3"};
 
                                     :hover {
