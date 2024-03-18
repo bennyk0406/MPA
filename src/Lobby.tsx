@@ -7,14 +7,18 @@ import { useNavigate } from "react-router-dom"
 import Title from "./components/Title"
 
 const now = {
-    name: "#2. 강의실 바닥 꾸미기",
-    href: "./paint"
+    name: "#3. 실험실 불 끄기",
+    href: "./fire"
 }
 
 const subject = [
     {
         name: "#1. 라면 밀기",
         href: "./ramen"
+    },
+    {
+        name: "#2. 강의실 바닥 꾸미기",
+        href: "./paint"
     }
 ]
 

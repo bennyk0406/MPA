@@ -8,14 +8,14 @@ import { faCaretDown, faCaretLeft, faCaretRight, faCaretUp, faPerson, faRotateRi
 import { faCopy } from "@fortawesome/free-regular-svg-icons"
 import Button from "../components/Button"
 import Modal from "../components/Modal"
-import Notification from "../components/Notification"
 import Title from "../components/Title"
 import Noodle from "../assets/noodle.svg"
+import { EventHandler } from "../utils/event"
 
 const Problem = () => {
     const [searchParams] = useSearchParams()
     const number = searchParams.get("no")
-    if (number === null) return <></>
+
     const [mapData, setMapData] = useState<MapData>({
         width: 0,
         height: 0,
@@ -35,7 +35,6 @@ const Problem = () => {
     const [width, setWidth] = useState(0)
     const [wall, setWall] = useState<boolean[][]>([])
     const [resetModal, setResetModal] = useState(false)
-    const [notification, setNotification] = useState<string>()
     
     const div = useRef<HTMLDivElement>(null)
 
@@ -57,7 +56,7 @@ const Problem = () => {
             modifiedWall[data.position[0]][data.position[1]] = "@"
             setProblem(modifiedWall.map((v) => v.join("")).join("\n"))
         })  
-    }, [])
+    }, [number])
 
     useEffect(() => {
         if (mapData === undefined) return
@@ -87,7 +86,7 @@ const Problem = () => {
         const [y, x] = noodlePos
         const [goalY, goalX] = mapData.goal
         setFinished(y === goalY && x === goalX)
-    }, [noodlePos])
+    }, [noodlePos, mapData.goal])
 
     const moveNoodle = (direction: "left" | "right" | "up" | "down") => {
         let [y, x] = noodlePos
@@ -108,7 +107,7 @@ const Problem = () => {
         else if (direction === "up") y--
         else y++
         if (x < 0 || x >= width || y < 0 || y >= height || wall[y][x]) return
-        let [noodleY, noodleX] = noodlePos
+        const [noodleY, noodleX] = noodlePos
         if ([0, 1].includes(y - noodleY) && [0, 1].includes(x - noodleX)) {
             const res = moveNoodle(direction)
             if (!res) return
@@ -133,10 +132,7 @@ const Problem = () => {
 
     const copy = () => {
         navigator.clipboard.writeText(path).then(() => {
-            setNotification("이동 경로가 복사되었습니다!")
-            setTimeout(() => {
-                setNotification(undefined)
-            }, 3000)
+            EventHandler.trigger("notification", "이동 경로가 복사되었습니다!")
         })
     }
 
@@ -154,10 +150,7 @@ const Problem = () => {
                 `}>
                     <Button action={() => {
                         navigator.clipboard.writeText(problem).then(() => {
-                            setNotification("문제가 복사되었습니다!")
-                            setTimeout(() => {
-                                setNotification(undefined)
-                            }, 3000)
+                            EventHandler.trigger("notification", "문제가 복사되었습니다!")
                         })
                     }} width={25} height={25}>
                         <FontAwesomeIcon icon={faCopy} />
@@ -353,7 +346,6 @@ const Problem = () => {
                 </div>
             </Modal>
             : <></>}
-            <Notification content={notification} />
         </div>
     )
 }
