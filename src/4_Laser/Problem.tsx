@@ -346,7 +346,7 @@ const Problem = () => {
                                     css={css`
                                         height: 50px;
                                         aspect-ratio: 1;
-                                        background-color: ${selectedDir === "diagonal" ? "gray" : "blue"};
+                                        background-color: ${selectedDir === "diagonal" ? "gray" : "#202020"};
                                         border-radius: 6px;
                                         display: flex;
                                         justify-content: center;

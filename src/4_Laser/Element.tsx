@@ -54,9 +54,15 @@ export const SplitterDiv: React.FC<{ info: Splitter }> = (props) => {
                     border-radius: 5px;
                     ${direction === "diagonal" && "transform: rotate(135deg);"}
                     ${direction === "anti" && "transform: rotate(45deg);"}
-                    background-color: #2014DE;
+                    // background-color: #2014DE;
+                    border-color: #2014DE;
+                    border-width: 2px;
+                    border-style: solid;
+                    // display: flex;
+                    // align-items: center;
                 `}
-            />
+            >
+            </div>
         </div>
     )
 }

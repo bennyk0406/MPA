@@ -1,6 +1,6 @@
 export const map = `
->.X.
-.\\..
-g./.
-.Xg.
+.>X.
+.X/.
+.gXX
+.X.X
 `
