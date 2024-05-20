@@ -1,63 +1,98 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react"
-import Check from "../assets/check.svg"
-import { CSSTransition } from "react-transition-group";
+import { CSSTransition } from "react-transition-group"
+import { useEffect, useState } from "react"
+import { useEvent } from "../utils/event"
 
-interface NotificationProps {
+import Check from "../assets/check.svg"
+
+interface INotificationInfo {
     content: string | undefined
 }
 
-const Notification: React.FC<NotificationProps> = (props) => {
-    return (
-        <CSSTransition in={props.content !== undefined} timeout={400} mountOnEnter unmountOnExit classNames="notification">
-            <div css={css`
-                position: fixed;
-                top: 50px;
-                left: 50%;
-                transform: translate(-50%, 0);
-                padding: 10px;
-                border-radius: 10px;
-                background-color: #ffffff;
-                display: flex;
-                flex-direction: row;
-                gap: 10px;
-                align-items: center;
-                box-shadow: #dadfe366 0px 4px 8px;
-                white-space: nowrap;
+export const Notification: React.FC<INotificationInfo> = (props) => {
+    const [mounted, setMounted] = useState(false)
 
-                @keyframes open {
-                    from {
-                        top: 0;
-                    }
-                    to { 
-                        top: 50px;
-                    }
-                }
+    useEffect(() => {
+        setMounted(true)
+        setTimeout(() => {
+            setMounted(false)
+        }, 3000)
+    }, [])
 
-                @keyframes close {
-                    from {
-                        opacity: 1;
-                    }
-                    to {
-                        opacity: 0;
-                    }
-                }
+    return (    
+        <CSSTransition in={mounted} timeout={400} mountOnEnter unmountOnExit classNames="notification">
+            <div
+                css={css`
+                    padding: 8px;
+                    border-radius: 8px;
+                    background-color: #ffffff;
+                    display: flex;
+                    flex-direction: row;
+                    gap: 8px;
+                    align-items: center;
+                    box-shadow: #dadfe366 0px 4px 8px;
+                    white-space: nowrap;
+                    position: relative;
+                    width: fit-content;
+                    margin: 0 auto;
 
-                &.notification-enter-active {
-                    animation: open 0.4s cubic-bezier(.4,0,.2,1) forwards
-                }
+                    @keyframes open {
+                        from {
+                            top: -50px;
+                        }
+                        to { 
+                            top: 0px;
+                        }
+                    }
 
-                &.notification-exit-active {
-                    animation: close 0.3s cubic-bezier(.4,0,.2,1) forwards
-                }
-            `}>
+                    @keyframes close {
+                        0% {
+                            opacity: 1;
+                        }
+                        100% {
+                            opacity: 0;
+                        }
+                    }
+
+                    &.notification-enter-active {
+                        animation: open 0.4s ease forwards;
+                    }
+
+                    &.notification-exit-active {
+                        animation: close 0.4s ease forwards;
+                    }
+                `}
+            >
                 <img src={Check} height={20} />
-                <div>
-                    {props.content}
-                </div>
+                <div>{props.content}</div>
             </div>
         </CSSTransition>
     )
 }
 
-export default Notification
+export const NotiContainer: React.FC = () => {
+    const [contents, setContents] = useState<{ content: string, key: string }[]>([])
+
+    useEvent("notification", (content: string) => {
+        const key = Date.now().toString()
+        setContents([ ...contents, { content, key } ])
+    })
+
+    return (
+        <div
+            css={css`
+                position: fixed;
+                top: 30px;
+                left: 50%;
+                transform: translate(-50%, 0);
+                display: flex;
+                flex-direction: column;
+                z-index: 100;
+                gap: 20px; 
+            `}
+        >
+            {contents.map((props) => <Notification {...props} />)}
+        </div>
+    )
+}
