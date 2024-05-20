@@ -86,7 +86,7 @@ const Problem = () => {
             setInfo({
                 textProblem: textMap,
                 originalMap,
-                nowMap: originalMap
+                nowMap: structuredClone(originalMap)
             })
         })
     }, [number])
