@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom"
 import Title from "./components/Title"
 
 const now = {
-    name: "#3. 실험실 불 끄기",
-    href: "./fire"
+    name: "#4. 실험실 탈출하기",
+    href: "./laser"
 }
 
 const subject = [
@@ -19,6 +19,10 @@ const subject = [
     {
         name: "#2. 강의실 바닥 꾸미기",
         href: "./paint"
+    },
+    {
+        name: "#3. 실험실 불 끄기",
+        href: "./fire"
     }
 ]
 

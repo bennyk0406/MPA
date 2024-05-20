@@ -17,6 +17,7 @@ const Modal: React.FC<ModalProps> = (props) => {
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 10;
         `}>
             {props.children}
         </div>
