@@ -127,14 +127,20 @@ const Problem = () => {
                 direction,
                 laser: []
             }
+            for (let i = 0; i < newInfo.nowMap.length; i++) {
+                for (let j = 0; j < newInfo.nowMap[0].length; j++) {
+                    newInfo.nowMap[i][j].laser = []
+                }
+            }
             return newInfo
         })
     }
 
     const shoot = () => {
         if (finished) return
-        const {nowMap} = info
-        const visited = nowMap.map(() => new Array(nowMap[0].length).fill(false) as boolean[])
+        const { nowMap } = info
+        const visited = nowMap.map(() => new Array(nowMap[0].length).fill(null).map(() => ({ "left": false, "right": false, "up": false, "down": false })) as Record<HVDirection, boolean>[])
+        let isStart = true
         // find start
         const stack: [number, number, HVDirection][] = []
         for (let i = 0; i < nowMap.length; i++) {
@@ -147,8 +153,9 @@ const Problem = () => {
         // traversal
         while (stack.length !== 0) {
             const [originRow, originColumn, originDir] = stack.pop() as [number, number, HVDirection]
-            if (visited[originRow][originColumn]) return
-            // visited[originRow][originColumn] = true
+            console.log(originRow, originColumn, originDir, visited[originRow][originColumn][originDir])
+            if (visited[originRow][originColumn][originDir]) continue
+            visited[originRow][originColumn][originDir] = true
 
             let direction: HVDirection = originDir
             const originElement = nowMap[originRow][originColumn]
@@ -188,6 +195,7 @@ const Problem = () => {
                     originElement.detected = true
                     continue
                 }
+                if (originElement.type === "start" && !isStart) continue
                 nowMap[originRow][originColumn].laser.push(direction)
                 const newRow = originRow + (direction === "up" ? -1 : direction === "down" ? 1 : 0)
                 const newColumn = originColumn + (direction === "left" ? -1 : direction === "right" ? 1 : 0)
@@ -195,13 +203,12 @@ const Problem = () => {
                 nowMap[newRow][newColumn].laser.push(direction === "up" ? "down" : direction === "down" ? "up" : direction === "left" ? "right" : "left")
                 stack.push([newRow, newColumn, direction])
             }
+            isStart = false
         }
-        
         setInfo({
             ...info,
             nowMap: structuredClone(nowMap)
         })
-        setFinished(true)
     }
 
     if (info?.nowMap?.length === 0) return <></>
