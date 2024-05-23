@@ -92,7 +92,7 @@ const Problem = () => {
     }, [number])
 
     useEffect(() => {
-        if (info.nowMap.length === 0 || !finished) return
+        if (info.nowMap.length === 0 || finished) return
         
         for (let i = 0; i < info.nowMap.length; i++) {
             for (let j = 0; j < info.nowMap[0].length; j++) {
@@ -100,6 +100,7 @@ const Problem = () => {
                 if (element.type === "end" && !element.detected) return 
             }
         }
+        setFinished(true)
         EventHandler.trigger("notification", "맞았습니다!")
     }, [info, finished])
 
