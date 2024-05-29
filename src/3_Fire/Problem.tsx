@@ -353,7 +353,7 @@ const Problem = () => {
                         font-size: 20px;
                         padding-top: 10px;
                     `}>
-                        정말로 리셋하시겠습니까?
+                        정말로 리셋하시겠습니까? 
                     </div>
                     <div css={css`
                         display: flex;

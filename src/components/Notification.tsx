@@ -34,6 +34,8 @@ export const Notification: React.FC<INotificationInfo> = (props) => {
                     box-shadow: #dadfe366 0px 4px 8px;
                     white-space: nowrap;
                     position: relative;
+                    width: fit-content;
+                    margin: 0 auto;
 
                     @keyframes open {
                         from {
